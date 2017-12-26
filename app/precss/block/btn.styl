@@ -1,0 +1,54 @@
+.btn
+  display: inline-block
+  border: none
+  color: #fff
+  text-decoration: none
+  background-color: ctr
+  padding: 10px 60px
+  font-size: 20px
+  +md-m()
+    font-size: 18px
+  r-extra()
+  font-weight: 600
+  border-radius: 2px
+  text-align: center
+  position: relative
+  outline: none
+  transition: background-color .1s ease
+  cursor: pointer
+  margin: 10px
+  &::after
+    transition: background-color .2s ease
+    position: absolute
+    content: ''
+    height: 4px
+    bottom: 0
+    width: 100%
+    background-color: darken(ctr, 50%)
+    opacity: .18
+    border-bottom-left-radius: 2px
+    border-bottom-right-radius: 2px
+    left: 0
+  &:focus, &:hover
+    text-decoration: none
+    color: #fff
+  &:hover
+    background-color: lighten(ctr, 5%)
+    &::after
+      opacity: .22
+  &:active
+    background-color: darken(ctr, 5%)
+    &::after
+      opacity: .32
+  &__grey
+    background: ctr2
+    &:after
+      background-color: darken(ctr2, 15%)
+    &:hover
+      background-color: lighten(ctr2, 5%)
+      &:after
+        opacity .22
+    &:active
+      background-color: darken(ctr2, 5%)
+      &:after
+        opacity .32

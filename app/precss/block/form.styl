@@ -1,0 +1,19 @@
+.form
+  padding: 30px 0
+  background-color: fon
+  input
+    background-color: lighten(fon, 6%)
+    &:focus
+      background-color: #fff
+  form
+    grid-gap gutter
+    grid-template-columns repeat(4, 1fr)
+    +sm-m()
+      grid-template-columns 1fr 1fr
+    +xs-m()
+      grid-template-columns 1fr
+  .btn
+    font-size: 17px
+    padding: 9px
+    margin: 0
+    width: 100%

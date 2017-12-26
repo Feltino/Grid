@@ -1,0 +1,75 @@
+.portfolio
+  padding: 10px
+  grid-template-columns repeat(4, 1fr)
+  grid-gap 10px
+  +md-m()
+    grid-template-columns repeat(3, 1fr)
+  +xs-m()
+    grid-template-columns 1fr
+  &__item
+    min-height: 32vh
+    background-size: cover
+    background-position: center
+    text-align: center
+    align-content: center
+    padding: gutter
+    font-size: 20px
+    +md-m()
+      min-height: 40vh
+      font-size: 16px
+      &:nth-child(4)
+        grid-column 2 / 4
+      &:nth-child(5)
+        grid-column 1 / 3
+        grid-row initial
+      &:nth-child(6)
+        grid-column initial
+        grid-row initial
+    +xs-m()
+      min-height: 50vh
+      &:nth-child(1)
+        grid-column initial
+      &:nth-child(4)
+        grid-column initial
+      &:nth-child(5)
+        grid-column initial
+    r-bold()
+    color: #fff
+    position: relative
+    transition color .5s ease
+    cursor pointer
+    &:hover
+      color: ctr
+      &:before
+        opacity:.85;
+    &:before
+      content ''
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+      background-color: fon
+      opacity: .65
+      transition opacity .5s ease
+    >*
+      z-index: 1
+    &:nth-child(1)
+      grid-column 1 / 3
+    &:nth-child(5)
+      grid-column 2 / 4
+    &:nth-child(6)
+      grid-column 4
+      grid-row 2 / 4
+  &__case
+    text-align: center
+    grid-column 1 / -1
+    padding: gutter gutter 50px
+    +lg-m()
+      grid-column 2 / 4
+    +md-m()
+      grid-column 2 / 3
+    +xs-m()
+      grid-column 1 / 2
+
+    

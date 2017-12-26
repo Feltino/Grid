@@ -1,0 +1,37 @@
+h2
+  font-size: 34px
+  r-bold()
+  color: fon
+  line-height: 1.2
+.container
+  max-width: 1200px
+  margin: auto
+  padding: 0 gutter
+.section
+  padding: 80px 0
+  +sm-s()
+    padding: 50px 0
+.ready
+  background-color: fon2
+  & .container
+    grid-template-columns 1fr 1fr
+    +sm-m()
+      grid-template-columns 1fr
+      > div
+        padding: 0 8%
+  &__left
+    border-right: 1px solid #dadada
+    font-size: 18px
+    r-reg()
+    padding 60px 60px 0 0
+    +sm-m()
+      border none
+    h2
+      margin-top: 0
+      margin-bottom: 40px
+      +sm-m()
+        text-align: center
+        font-size: 26px
+        margin-bottom: 26px
+  &__right
+    padding-left: 40px
