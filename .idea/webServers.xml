@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="838e5482-a94f-4965-bff0-13c1c9a4aa6b" name="Сайт" url="http://jangol.ftp.tools">
+        <fileTransfer host="jangol.ftp.tools" port="21" rootFolder="/home/jangol/modex/assets/project">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
