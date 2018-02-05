@@ -104,8 +104,6 @@ gulp.task('js-comp:build', function () {
 gulp.task('js:build', function () {
     return gulp.src(path.app.lib)
         .pipe(concat('script.js'))
-        .pipe(gulp.dest(path.app.comp)),
-    gulp.src(path.app.js) //Найдем наш main файл
         .pipe(sourcemaps.init()) //Инициализируем sourcemap
         .pipe(uglify().on('error', gutil.log))
         .pipe(uglify()) //Сожмем наш js
@@ -168,7 +166,6 @@ gulp.task('build', [
     'vendorJs:build',
     'google:fonts',
     'html:build',
-    'js-comp:build',
     'js:build',
     'styl:build',
     'css:build',

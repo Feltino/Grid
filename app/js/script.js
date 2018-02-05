@@ -1,357 +1,231 @@
-
-$('.win__b').on('click', function () {
-    $('.win__c').toggleClass( "highlight" );
-});
-$('.win__b-2').on('click', function () {
-    $('.win__c-2').toggleClass( "highlight" );
-});
-$('.win__b-3').on('click', function () {
-    $('.win__c-3').toggleClass( "highlight" );
-});
-$('.win__b-4').on('click', function () {
-    $('.win__c-4').toggleClass( "highlight" );
-});
-$('.head__search').on('click', function () {
-    $('.ve-menu').toggleClass( "highdark" );
-    $('.head__cls').toggleClass( "highlight" );
-    $('.head__search').toggleClass( "highdark" );
-    $('.head__srch').toggleClass( "highlight" );
+$(document).ready(function () {
+    $(".progres").circularProgress({
+        color:"#f0650d",
+        line_width: 18,
+        height: "350px",
+        width: "350px",
+        percent: 0,
+        starting_position: 25
+    }).circularProgress('animate', 100, 2500)
 });
 
-/**
- * @author zhangsilei 响应式头部菜单导航
- * @description 代码优化，
- */
-;
-(function($, w) {
+    $(window).on('load', function () {
+        var $preloader = $('#preloader');
+        $preloader.delay(1800).fadeOut('slow');
+    });
+(function ( $ ) {
 
-    // 页面元素
-    var $firstMenu = $('.ve-menu-pc'),
-        $firstLinks = $firstMenu.children('li').children('a'),
-        $sencondLinks = $firstMenu.find('ul').find('a'),
-        hasSecond = $firstMenu.find('ul').length;
+    var global_settings = {};
 
-    // 菜单类构造方法
-    var Menu = function(options) {
-        // 自带主题: dark(黑底白字)、blue(蓝底白字)
-        this.themeColor = {
-            blue: {
-                fontColor: '#fff',
-                bgColor: '#293547',
-                hoverFontColor: '#fff',
-                hoverBgColor: '#1260de'
-            },
-            dark: {
-                fontColor: '#9D9D9D',
-                bgColor: '#1F1F1F',
-                hoverFontColor: '#fff',
-                hoverBgColor: '#000'
+    var methods = {
+        init : function(options) {
+            // This is the easiest way to have default options.
+            var settings = $.extend({
+                // These are the defaults.
+                color: "#000000",
+                height: "300px",
+                width: "300px",
+                line_width: 8,
+                starting_position: 25,
+                percent: 100,
+                counter_clockwise: false,
+                percentage: true,
+                text: ''
+            }, options );
+            global_settings = settings;
+
+
+            // Create percentage
+            var percentage = $("<div class='progress-percentage'></div>");
+
+            if(!global_settings.percentage) {
+                percentage.text(global_settings.percentage);
             }
-        };
-        this.defaults = {
-            firstFontSize: '16px',
-            firstFontColor: this.themeColor.blue.fontColor,
-            firstBgColor: this.themeColor.blue.bgColor,
-            firstHoverFontColor: this.themeColor.blue.hoverFontColor,
-            firstHoverBgColor: this.themeColor.blue.hoverBgColor,
+            $(this).append(percentage);
 
-            secondFontSize: '16px',
-            secondFontColor: this.themeColor.blue.fontColor,
-            secondBgColor: this.themeColor.blue.bgColor,
-            secondHoverFontColor: this.themeColor.blue.hoverFontColor,
-            secondHoverBgColor: this.themeColor.blue.hoverBgColor,
 
-            height: 59,
-            itemWidth: 20,
-            itemMargin: 1,
-            theme: 'blue',
-            menuIconColor: '#000',
-            menuMaskColor: '#000',
-            mFirstBgColor: '#000',
-            mFirstFontColor: '#fff',
-            mSecondBgColor: '#222',
-            mSecondFontColor: '#fff',
-            closeIconColor: '#fff',
+            // Create text
+            var text = $("<div class='progress-text'></div>");
 
-            animate: false,
-            speed: 200
-        };
-        this.settings = $.extend({}, this.defaults, options);
-        this.isMobile = !!navigator.userAgent.match(/AppleWebKit.*Mobile.*/);;
-    }
-
-    // 原型链上加属性和方法
-    Menu.prototype = {
-        setDefaultTheme: function() {
-            var _this = this;
-            // 设置默认主题
-            switch (_this.settings.theme) {
-                case 'blue':
-                    setThemeColor(_this.themeColor.blue.fontColor, _this.themeColor.blue.bgColor);
-                    !_this.isMobile && setHoverBgColor(_this.themeColor.blue.hoverFontColor, _this.themeColor.blue.hoverBgColor);
-                    break;
-                case 'dark':
-                    setThemeColor(_this.themeColor.dark.fontColor, _this.themeColor.dark.bgColor);
-                    !_this.isMobile && setHoverBgColor(_this.themeColor.dark.hoverFontColor, _this.themeColor.dark.hoverBgColor);
-                    break;
-            };
-            // 设置默认主题颜色
-            function setThemeColor(fontColor, bgColor) {
-                $firstLinks.css({
-                    color: fontColor,
-                    backgroundColor: bgColor
-                });
-                $sencondLinks.css({
-                    color: fontColor,
-                    backgroundColor: bgColor
-                });
+            // Custom text
+            if(global_settings.text != "percent") {
+                text.text(global_settings.text);
             }
-            // 设置鼠标滑过背景颜色
-            function setHoverBgColor(fontColor, bgColor) {
-                var normalFontColor, normalBgColor;
-                $firstMenu.find('a').hover(function() {
-                    var $this = $(this),
-                        normalFontColor = $this.css('color');
-                    normalBgColor = $this.css('backgroundColor');
-                    $this.css({
-                        color: fontColor,
-                        backgroundColor: bgColor
-                    });
-                }, function() {
-                    $(this).css({
-                        color: normalFontColor,
-                        backgroundColor: normalBgColor
-                    });
-                });
+            $(this).append(text);
+
+            // Correct any invalid values
+            if(global_settings.starting_position != 100) {
+                global_settings.starting_position = global_settings.starting_position % 100;
             }
-            return _this;
-        },
-        setFirstMenu: function() {
-            var _this = this;
-            $firstLinks.css({
-                height: _this.settings.height,
-                lineHeight: _this.settings.height + 'px',
-                fontSize: _this.settings.firstFontSize,
-                color: _this.settings.firstFontColor,
-                backgroundColor: _this.settings.firstBgColor
-            }).parent('li').each(function(index, el) {
-                var $this = $(this);
-                $this.width($this.width() + _this.settings.itemWidth); // 一级菜单宽度
-            }).not($firstMenu.children('li').first()).css({
-                marginLeft: this.settings.itemMargin + 'px' // 菜单间隙
+            if(global_settings.ending_position != 100) {
+                global_settings.ending_position = global_settings.ending_position % 100;
+            }
+            // No 'px' or '%', add 'px'
+            appendUnit(global_settings.width);
+            appendUnit(global_settings.height);
+
+            // Apply global_settings
+            $(this).css({
+                "height": global_settings.height,
+                "width": global_settings.width
             });
-            return _this;
-        },
-        setSecondMenu: function() {
-            var _this = this;
-            if (hasSecond) {
-                $sencondLinks.css({
-                    height: _this.settings.height,
-                    lineHeight: _this.settings.height + 'px',
-                    fontSize: _this.settings.secondFontSize,
-                    color: _this.settings.secondFontColor,
-                    backgroundColor: _this.settings.secondBgColor
-                });
-                // 二级菜单宽度
-                $.each($firstLinks, function(index, val) {
-                    var $secondMenu = $(this).next('ul');
-                    $secondMenu.css('top', _this.settings.height);
-                    if ($secondMenu.width() + _this.settings.itemWidth < $firstLinks.width()) {
-                        $secondMenu.width($firstLinks.width());
-                    } else {
-                        $secondMenu.width($secondMenu.width() + _this.settings.itemWidth);
-                    }
-                });
-            }
-            return _this;
-        },
-        setHoverCss: function() {
-            var _this = this;
-            // 一级菜单样式
-            $firstLinks.hover(function() {
-                $(this).css({
-                    color: _this.settings.firstHoverFontColor,
-                    backgroundColor: _this.settings.firstHoverBgColor
-                })
-            }, function() {
-                $(this).css({
-                    color: _this.settings.firstFontColor,
-                    backgroundColor: _this.settings.firstBgColor
-                })
-            });
-            // 二级菜单样式
-            $sencondLinks.hover(function() {
-                var $this = $(this);
-                $this.css({
-                    color: _this.settings.secondHoverFontColor,
-                    backgroundColor: _this.settings.secondHoverBgColor
-                });
-                $this.parents('ul').first().prev().css({
-                    color: _this.settings.firstHoverFontColor,
-                    backgroundColor: _this.settings.firstHoverBgColor
-                });
-            }, function() {
-                var $this = $(this);
-                $this.css({
-                    color: _this.settings.secondFontColor,
-                    backgroundColor: _this.settings.secondBgColor
-                });
-                $this.parents('ul').first().prev().css({
-                    color: _this.settings.firstFontColor,
-                    backgroundColor: _this.settings.firstBgColor
-                });
-            });
-        },
-        responsiveLayout: function() {
-            var _this = this,
-                screenWidth = $(w).width(),
-                $menuIcon = $('.ve-menu-icon'),
-                animate = _this.settings.animate;
-            if (screenWidth <= 768) {
-                if (!$menuIcon.length) {
-                    // 隐藏原菜单
-                    $firstMenu.hide();
-                    // 添加菜单按钮
-                    $firstMenu.after('<div class="ve-menu-icon"><div></div><div></div><div></div></div>');
-                    $menuIcon = $('.ve-menu-icon');
-                    $menuIcon.css('marginTop', 10)
-                        .on('click', function() {
-                            // 创建遮罩和一、二级菜单
-                            if (!$('.ve-menu-mask').length && !$('.ve-menu-mobile').length) {
-                                $('<div class="ve-menu-mask"></div>')
-                                    .css('background', _this.settings.menuMaskColor).appendTo('.ve-menu')
-                                    .after('<ul class="ve-menu-mobile"><li class="ve-menu-close"><div></div></li>' + $firstMenu.html() + '</ul>')
-                                    .next().find('ul, li, a')
-                                    .removeAttr('style');
-                            }
+            $(this).addClass("circular-progress-bar");
 
-                            // TODO 将动画速度设为插件的参数
-                            // 动画显示一级菜单和遮罩层
-                            if (animate) {
-                                _this.animate($('.ve-menu-mask'), animate, _this.settings.speed, 'open');
-                                _this.animate($('.ve-menu-mobile'), animate, _this.settings.speed, 'open');
-                            } else {
-                                $('.ve-menu-mask').show();
-                                $('.ve-menu-mobile').show();
-                            }
+            // Remove old canvas
+            $(this).find("canvas").remove();
 
-                            // 二级菜单样式
-                            $('.ve-menu-mobile > li').not('.ve-menu-close')
-                                .find('ul').find('a')
-                                .css({ //  二级菜单样式
-                                    background: _this.settings.mSecondBgColor,
-                                    color: _this.settings.mSecondFontColor
-                                });
+            // Put canvas inside this
+            $(this).append(createCanvas($(this)));
 
-                            // 一级菜单点击事件，每次打开一级菜单时重新绑定，防止重复
-                            $('.ve-menu-mobile > li').not('.ve-menu-close')
-                                .unbind('click')
-                                .on('click', function(e) {
-                                    // 暂时不支持自定义动画，默认为toggle动效
-                                    // TODO 添加自定义动画
-                                    // 二级菜单动画
-                                    if (animate) {
-                                        $(this).find('ul').toggle(150);
-                                    } else {
-                                        $(this).find('ul').toggle();
-                                    }
-                                });
-
-                            // 关闭按钮样式、点击事件
-                            $('.ve-menu-close').css('color', _this.settings.closeIconColor)
-                                .children('div')
-                                .on('click', function() {
-                                    // 动画结束
-                                    if (animate) {
-                                        _this.animate($('.ve-menu-mask'), animate, _this.settings.speed, 'close');
-                                        _this.animate($('.ve-menu-mobile'), animate, _this.settings.speed, 'close');
-                                    } else {
-                                        $('.ve-menu-mask').hide();
-                                        $('.ve-menu-mobile').hide();
-                                    }
-                                });
-                        })
-                        .children('div')
-                        .css('background', _this.settings.menuIconColor);
-                } else {
-                    $firstMenu.hide();
-                    $menuIcon.show();
-                }
-            } else {
-                if ($menuIcon.length) {
-                    $firstMenu.show();
-                    $menuIcon.hide();
-                }
-            }
-
-            return _this;
-        },
-        supportFastClick: function() {
-            if (this.isMobile) { // 在移动端打开页面，将事件触发改为click
-                try {
-                    if (FastClick) {
-                        FastClick.attach(document.body); // 支持fastclick
-                    }
-                } catch (e) {
-                    console.log('fastclick.js is not found.You are still using normal \'click\'');
-                }
-            } else { // 在PC端打开页面，事件触发仍为hover
-                // if (hasSecond) {
-                this.setHoverCss();
-                // }
-            }
+            // Return allows for chaining
             return this;
         },
-        animate: function($ele, type, speed, openOrClose) {
-            var startStyle = {},
-                endStyle = {};
+        percent : function(value) {
+            // Change percent
+            global_settings.percent = value;
+            // Apply global_settings
+            $(this).css({
+                "height": global_settings.height,
+                "width": global_settings.width
+            });
+            // Remove old canvas
+            $(this).children("canvas").remove();
+            // Put canvas inside this
+            $(this).append(createCanvas($(this)));
 
-            switch (type) {
-                case 'fade':
-                    if (openOrClose == 'open') {
-                        $ele.hide();
-                        $ele.fadeIn(speed);
-                    } else if (openOrClose == 'close') {
-                        $ele.fadeOut(speed);
-                    }
-                    // $ele.css('opacity', 0);
-                    // startStyle.opacity = 1;
-                    // endStyle.opacity = 0;
-                    break;
-                case 'slide':
-                    $ele.stop(true, true);
-                    if (openOrClose == 'open') {
-                        startStyle.height = 0;
-                        endStyle.height = '100%';
-                    } else if (openOrClose == 'close') {
-                        startStyle.height = '100%';
-                        endStyle.height = 0;
-                    }
-                    $ele.css(startStyle).animate(endStyle, speed);
-                    break;
-            }
+            // Return allows for chaining
+            return this;
+        },
+        animate : function(value, time) {
+            // Apply global_settings
+            $(this).css({
+                "height": global_settings.height,
+                "width": global_settings.width
+            });
+
+            // Number of intervals, 10ms interval
+            var num_of_steps = time / 10;
+            // Amount of change each step
+            var percent_change = (value - global_settings.percent) / num_of_steps;
+
+            // Variable conflict, rename this
+            var scope = $(this);
+            var theInterval = setInterval(function() {
+                if(global_settings.percent < value) {
+                    // Remove old canvas
+                    scope.children("canvas").remove();
+                    // Increment percent
+                    global_settings.percent += percent_change;
+                    // Put canvas inside this
+                    scope.append(createCanvas(scope));
+                } else {
+                    clearInterval(theInterval);
+                }
+            }, 10);
+
+            // Return allows for chaining
+            return this;
         }
+    };
+
+    $.fn.circularProgress = function(methodOrOptions) {
+        if (methods[methodOrOptions]) {
+            // Method found
+            return methods[methodOrOptions].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
+            // Default to "init", object passed in or nothing passed in
+            return methods.init.apply( this, arguments );
+        } else {
+            $.error('Method ' +  methodOrOptions + ' does not exist.');
+        }
+    };
+
+    /* =========================================================================
+        PRIVATE FUNCTIONS
+    ========================================================================= */
+
+    // return string without 'px' or '%'
+    function removeUnit(apples) {
+        if(apples.indexOf("px")) {
+            return apples.substring(0, apples.length - 2);
+        } else if(canvas_height.indexOf("%")) {
+            return apples.substring(0, apples.length - 1);
+        }
+    };
+    // return string with 'px'
+    function appendUnit(apples) {
+        if(apples.toString().indexOf("px") < -1 && apples.toString().indexOf("%") < -1) {
+            return apples += "px";
+        }
+    };
+    // calculate starting position on canvas
+    function calcPos(apples, percent) {
+        if(percent < 0) {
+            // Calculate starting position
+            var starting_degree = (parseInt(apples) / 100) * 360;
+            var starting_radian = starting_degree * (Math.PI / 180);
+            return starting_radian - (Math.PI / 2);
+        } else {
+            // Calculate ending position
+            var ending_degree = ((parseInt(apples) + parseInt(percent)) / 100) * 360;
+            var ending_radian = ending_degree * (Math.PI / 180);
+            return ending_radian - (Math.PI / 2);
+        }
+    };
+    // Put percentage or custom text inside progress circle
+    function insertText(scope) {
+        $(".progress-percentage").text(Math.round(global_settings.percent) + "%");
     }
+    // create canvas
+    function createCanvas(scope) {
+        // Remove 'px' or '%'
+        var canvas_height = removeUnit(global_settings.height.toString());
+        var canvas_width = removeUnit(global_settings.width.toString());
 
-    // 将插件挂到jQuery下并初始化
-    $.fn.menu = function(options) {
-        var menu = new Menu(options);
-        menu.setDefaultTheme()
-            .setFirstMenu()
-            .setSecondMenu()
-            .responsiveLayout()
-            .supportFastClick();
-        $(window).resize(function(event) {
-            menu.responsiveLayout()
-        });
-        return this;
-    }
+        // Create canvas
+        var canvas = document.createElement("canvas");
+        canvas.height = canvas_height;
+        canvas.width = canvas_width;
 
-})(jQuery, window)
+        // Create drawable canvas and apply properties
+        var ctx = canvas.getContext("2d");
+        ctx.strokeStyle = global_settings.color;
+        ctx.lineWidth = global_settings.line_width;
 
-$('#play').on('click', function () {
-    $( '#video-placeholder' ).toggleClass( "highlight" );
-});
-$('.two__step').on('click', function () {
-    $( '#video-placeholder' ).toggleClass( "highlight" );
-});
+        // Draw arc
+        ctx.beginPath();
+
+        // Calculate starting and ending positions
+        var starting_radian = calcPos(global_settings.starting_position, -1);
+        var ending_radian = calcPos(global_settings.starting_position, global_settings.percent);
+        // Calculate radius and x,y coordinates
+        var radius = 0;
+        var xcoord = canvas_width / 2;
+        var ycoord = canvas_height / 2;
+        // Height or width greater
+        if(canvas_height >= canvas_width) {
+            radius = canvas_width * 0.9 / 2 - (global_settings.line_width * 2);
+        } else {
+            radius = canvas_height * 0.9 / 2 - (global_settings.line_width * 2);
+        }
+
+        /*
+            x coordinate
+            y coordinate
+            radius of circle
+            starting angle in radians
+            ending angle in radians
+            clockwise (false, default) or counter-clockwise (true)
+        */
+        ctx.arc(xcoord, ycoord, radius, starting_radian, ending_radian, global_settings.counter_clockwise);
+        ctx.stroke();
+
+        // Add text
+        if(global_settings.percentage) {
+            insertText(scope);
+        }
+
+        return canvas;
+    };
+
+}( jQuery ));
